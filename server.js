@@ -5,6 +5,7 @@ var app = express();
 
 app.get('/', function (req, res) {
   var ip;
+  var info = platform.parse(req.headers['user-agent']);
   if (req.headers['x-forwarded-for']) {
     ip = req.headers['x-forwarded-for'].split(",")[0];
   } else if (req.connection && req.connection.remoteAddress) {
@@ -13,12 +14,11 @@ app.get('/', function (req, res) {
     ip = req.ip;
   }
   var locale = accepts(req).languages();
-  //console.log(platform.os.toString());
   
   var retobj = {
     ipaddress:ip,
     language:locale[0],
-    software:platform.os.toString()
+    software:info.os.toString()
   };
   res.send(retobj);
 });
